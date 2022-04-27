@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Trollstigen%3b_Wasserfall_&amp;_Brücke_Norwegen.JPG" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Vortice.XInput" Version="2.1.2" />
   </ItemGroup>
 

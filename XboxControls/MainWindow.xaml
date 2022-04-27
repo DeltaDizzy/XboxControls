@@ -7,21 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Rectangle x:Name="rctA" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <TextBlock HorizontalAlignment="Left" Margin="48,36,0,0" TextWrapping="Wrap" Text="A" VerticalAlignment="Top" FontSize="36"/>
-        <Rectangle x:Name="rctB" HorizontalAlignment="Left" Height="100" Margin="133,10,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <TextBlock HorizontalAlignment="Left" Margin="171,36,0,0" TextWrapping="Wrap" Text="B" VerticalAlignment="Top" FontSize="36"/>
-        <Rectangle x:Name="rctX" HorizontalAlignment="Left" Height="100" Margin="10,131,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <TextBlock HorizontalAlignment="Left" Margin="48,157,0,0" TextWrapping="Wrap" Text="X" VerticalAlignment="Top" FontSize="36"/>
-        <Rectangle x:Name="rctY" HorizontalAlignment="Left" Height="100" Margin="135,131,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <TextBlock HorizontalAlignment="Left" Margin="173,157,0,0" TextWrapping="Wrap" Text="Y" VerticalAlignment="Top" FontSize="36"/>
-        <Rectangle x:Name="rctY_Copy" HorizontalAlignment="Left" Height="100" Margin="9,255,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <TextBlock HorizontalAlignment="Left" Margin="43,281,0,0" TextWrapping="Wrap" Text="LB" VerticalAlignment="Top" FontSize="36"/>
-        <Rectangle x:Name="rctY_Copy1" HorizontalAlignment="Left" Height="100" Margin="135,255,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <TextBlock HorizontalAlignment="Left" Margin="164,281,0,0" TextWrapping="Wrap" Text="RB" VerticalAlignment="Top" FontSize="36"/>
-        <ProgressBar x:Name="pbLT" HorizontalAlignment="Left" Height="24" Margin="296,36,0,0" VerticalAlignment="Top" Width="374" FontSize="24" Maximum="1" SmallChange="0.01"/>
-        <ProgressBar x:Name="pbRT" HorizontalAlignment="Left" Height="24" Margin="296,65,0,0" VerticalAlignment="Top" Width="374" FontSize="24" Maximum="1" SmallChange="0.01"/>
-        <TextBlock HorizontalAlignment="Left" Margin="269,32,0,0" TextWrapping="Wrap" Text="LT" VerticalAlignment="Top" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Left" Margin="269,61,0,0" TextWrapping="Wrap" Text="RT" VerticalAlignment="Top" FontSize="24"/>
+        <Rectangle x:Name="rctPlayer" HorizontalAlignment="Left" Height="100" Margin="100,302,0,0" Stroke="Black" VerticalAlignment="Top" Width="100" Fill="#FFEA3939"/>
+        <Label x:Name="lbltext" Content="" HorizontalAlignment="Left" Margin="559,166,0,0" VerticalAlignment="Top" FontSize="22"/>
     </Grid>
 </Window>

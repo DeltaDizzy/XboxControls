@@ -22,20 +22,16 @@ namespace XboxControls
     /// </summary>
     public partial class MainWindow : Window
     {
-        DispatcherTimer timer;
+        readonly DispatcherTimer timer;
         Gamepad gamepad;
-        bool ok;
-        List<Rectangle> rectangles;
+        readonly double maxSpeed = 0.1;
+        TranslateTransform playerTransform = new TranslateTransform();
+        TranslateTransform
+        double offsetX = 0;
+        double offsetY = 0;
         public MainWindow()
         {
             InitializeComponent();
-            rectangles = new List<Rectangle>()
-            {
-                rctA,
-                rctB,
-                rctX,
-                rctY
-            };
             timer = new DispatcherTimer(new TimeSpan(200), DispatcherPriority.Input, Timer_Tick, Dispatcher.CurrentDispatcher);
             timer.Start();
         }
@@ -46,55 +42,28 @@ namespace XboxControls
             {
                 gamepad = state.Gamepad;
             }
-
-            // A B X Y
-            if (gamepad.Buttons.HasFlag(GamepadButtons.A))
-            {
-                setButtonPressed(rctA, true);
-            }
-            else
-            {
-                setButtonPressed(rctA, false);
-            }
-            if (gamepad.Buttons.HasFlag(GamepadButtons.B))
-            {
-                setButtonPressed(rctB, true);
-            }
-            else
-            {
-                setButtonPressed(rctB, false);
-            }
-            if (gamepad.Buttons.HasFlag(GamepadButtons.X))
-            {
-                setButtonPressed(rctX, true);
-            }
-            else
-            {
-                setButtonPressed(rctX, false);
-            }
-            if (gamepad.Buttons.HasFlag(GamepadButtons.Y))
-            {
-                setButtonPressed(rctY, true);
-            }
-            else
-            {
-                setButtonPressed(rctY, false);
-            }
-
-            // LT RT
-            pbLT.Value = gamepad.LeftTrigger / 255;
+            double speedX = NormalizeThumbstick(gamepad.LeftThumbX) * maxSpeed;
+            double speedY = NormalizeThumbstick(gamepad.LeftThumbY) * maxSpeed;
+            offsetX += speedX;
+            offsetY += -speedY;
+            playerTransform.X = offsetX;
+            playerTransform.Y = offsetY;
+            rctPlayer.RenderTransform = playerTransform;
+            lbltext.Content = $"X: {speedX} Y: {speedY}";
         }
 
-        private void setButtonPressed(Rectangle rect, bool pressed)
+        private double NormalizeThumbstick(short value)
         {
-            if (pressed)
+            double result;
+            result = value switch
             {
-                rect.Fill = Brushes.Green;
-            }
-            else
-            {
-                rect.Fill = Brushes.Red;
-            }
+                < 0 => value / 32768,
+                0 => 0,
+                > 0 => value / 32767
+            };
+
+
+            return result;
         }
     }
 }
