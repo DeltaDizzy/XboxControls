@@ -26,9 +26,9 @@ namespace XboxControls
         Gamepad gamepad;
         readonly double maxSpeed = 0.1;
         TranslateTransform playerTransform = new TranslateTransform();
-        TranslateTransform
         double offsetX = 0;
         double offsetY = 0;
+        ProjectileState projectileState = ProjectileState.LOCKED;
         public MainWindow()
         {
             InitializeComponent();
@@ -42,28 +42,86 @@ namespace XboxControls
             {
                 gamepad = state.Gamepad;
             }
-            double speedX = NormalizeThumbstick(gamepad.LeftThumbX) * maxSpeed;
-            double speedY = NormalizeThumbstick(gamepad.LeftThumbY) * maxSpeed;
+            double speedX = NormalizeThumbstick(gamepad.RightThumbX) * maxSpeed;
+            double speedY = NormalizeThumbstick(gamepad.RightThumbY) * maxSpeed;
             offsetX += speedX;
             offsetY += -speedY;
             playerTransform.X = offsetX;
             playerTransform.Y = offsetY;
             rctPlayer.RenderTransform = playerTransform;
-            lbltext.Content = $"X: {speedX} Y: {speedY}";
+            //lbltext.Content = $"X: {speedX} Y: {speedY}\nRaw X: {gamepad.LeftThumbX} Raw Y: {gamepad.LeftThumbY}\nNormX: {NormalizeThumbstick(gamepad.LeftThumbX)} NormY: {NormalizeThumbstick(gamepad.LeftThumbY)}";
+            switch (projectileState)
+            {
+                case ProjectileState.LOCKED:
+                    rctProjectile.RenderTransform = playerTransform;
+                    break;
+                case ProjectileState.FLYING:
+                    rctProjectile.RenderTransform.
+                    break;
+                case ProjectileState.OUTOFBOUNDS:
+                    break;
+                default:
+                    break;
+            }
         }
 
         private double NormalizeThumbstick(short value)
         {
+            int valueint = value;
             double result;
-            result = value switch
+            result = valueint switch
             {
-                < 0 => value / 32768,
+                < 0 => valueint / 32768.0,
                 0 => 0,
-                > 0 => value / 32767
+                > 0 => valueint / 32767.0
             };
 
 
             return result;
+        }
+
+        private RectVisibility IsOffScreen(Rectangle rect)
+        {
+           RectVisibility vec = new RectVisibility(false, false);
+            Point pos = rect.TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0, 0));
+            if (pos.X + rect.ActualWidth < 0 || pos.X + rect.ActualWidth > this.ActualWidth)
+            {
+                // off screen laterally
+                vec.Lateral = true;
+            }
+            else vec.Lateral = false;
+            if (pos.Y + rect.ActualHeight < 0 || pos.Y + rect.ActualHeight > this.ActualHeight)
+            {
+                // off screen laterally
+                vec.Vertical = true;
+            }
+            else vec.Vertical = false;
+
+            return vec;
+        }
+
+        private Point GetControlPosition(Rectangle control)
+        {
+            return control.TransformToAncestor(Application.Current.MainWindow).Transform(new Point(0, 0));
+        }
+
+        record struct RectVisibility
+        {
+            public bool Lateral { get; set; }
+            public bool Vertical { get; set; }
+
+            public RectVisibility(bool lateral, bool vertical)
+            {
+                Lateral = lateral;
+                Vertical = vertical;
+            }
+        }
+
+        enum ProjectileState
+        {
+            LOCKED,
+            FLYING,
+            OUTOFBOUNDS
         }
     }
 }
