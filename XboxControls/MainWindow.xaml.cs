@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Vortice.XInput;
@@ -22,21 +13,24 @@ namespace XboxControls
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly DispatcherTimer timer;
+        readonly DispatcherTimer movementTimer;
+        readonly Random r = new Random();
         Gamepad gamepad;
         readonly double maxSpeed = 0.1;
         TranslateTransform playerTransform = new TranslateTransform();
         double offsetX = 0;
         double offsetY = 0;
-        ProjectileState projectileState = ProjectileState.LOCKED;
+        int tickTracker = 0;
+        List<Enemy> enemies = new List<Enemy>();
+        DrawingVisual canvas = new DrawingVisual();
         public MainWindow()
         {
             InitializeComponent();
-            timer = new DispatcherTimer(new TimeSpan(200), DispatcherPriority.Input, Timer_Tick, Dispatcher.CurrentDispatcher);
-            timer.Start();
+            movementTimer = new DispatcherTimer(new TimeSpan(200), DispatcherPriority.Input, MovementTimer_Tick, Dispatcher.CurrentDispatcher);
+            movementTimer.Start();
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void MovementTimer_Tick(object? sender, EventArgs e)
         {
             if (XInput.GetState(0, out State state))
             {
@@ -50,19 +44,13 @@ namespace XboxControls
             playerTransform.Y = offsetY;
             rctPlayer.RenderTransform = playerTransform;
             //lbltext.Content = $"X: {speedX} Y: {speedY}\nRaw X: {gamepad.LeftThumbX} Raw Y: {gamepad.LeftThumbY}\nNormX: {NormalizeThumbstick(gamepad.LeftThumbX)} NormY: {NormalizeThumbstick(gamepad.LeftThumbY)}";
-            switch (projectileState)
+
+            if (tickTracker % 10 == 0)
             {
-                case ProjectileState.LOCKED:
-                    rctProjectile.RenderTransform = playerTransform;
-                    break;
-                case ProjectileState.FLYING:
-                    rctProjectile.RenderTransform.
-                    break;
-                case ProjectileState.OUTOFBOUNDS:
-                    break;
-                default:
-                    break;
+                //TODO: use DrawingVisual
+                enemies.Add(new Enemy((int)Application.Current.MainWindow.Width, (int)Application.Current.MainWindow.Height));
             }
+            tickTracker++;
         }
 
         private double NormalizeThumbstick(short value)
